@@ -15,9 +15,15 @@ import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.tomtom.quantity.Distance
+import com.tomtom.quantity.Speed.Companion.metersPerSecond
+import com.tomtom.sdk.location.GeoLocation
+import com.tomtom.sdk.location.GeoPoint
 import com.tomtom.sdk.location.LocationProvider
 import com.tomtom.sdk.location.OnLocationUpdateListener
 import com.tomtom.sdk.location.android.AndroidLocationProvider
+import com.tomtom.sdk.location.simulation.SimulationLocationProvider
+import com.tomtom.sdk.location.simulation.strategy.InterpolationStrategy
+import com.tomtom.sdk.location.simulation.strategy.TimestampStrategy
 import com.tomtom.sdk.map.display.MapOptions
 import com.tomtom.sdk.map.display.TomTomMap
 import com.tomtom.sdk.map.display.camera.CameraOptions
@@ -43,6 +49,8 @@ import com.tomtom.sdk.search.ui.SearchFragmentListener
 import com.tomtom.sdk.search.ui.model.PlaceDetails
 import com.tomtom.sdk.search.ui.model.SearchProperties
 import com.tomtom.sdk.vehicle.Vehicle
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 
 class MainActivity : AppCompatActivity() {
@@ -67,11 +75,29 @@ class MainActivity : AppCompatActivity() {
         initRoutePlanner()
     }
 
+    private fun initLocationSimulator() {
+        val locations = listOf(
+            GeoLocation(GeoPoint(42.3515232, -71.0555283)),
+            GeoLocation(GeoPoint(42.3542139, -71.0523134)),
+            GeoLocation(GeoPoint(42.3565556, -71.0507233)),
+            GeoLocation(GeoPoint(42.3596064, -71.0523086)),
+            GeoLocation(GeoPoint(42.356198, -71.0574533)),
+        )
+        val strategy = InterpolationStrategy(
+            locations = locations,
+            startDelay = 1.seconds,
+            broadcastDelay = 500.milliseconds,
+            currentSpeed = metersPerSecond(5.0)
+        )
+        locationProvider = SimulationLocationProvider.create(strategy)
+    }
     private fun initLocation() {
         // init location provider
         locationProvider = AndroidLocationProvider(
             context = applicationContext
         )
+        // for test
+        // initLocationSimulator()
         onLocationUpdateListener = OnLocationUpdateListener { location ->
             // on receiving the very first location update event, move camera to
             // current location with zoom level of 9 (city view)
@@ -196,13 +222,12 @@ class MainActivity : AppCompatActivity() {
         searchFab.hide()
         val routeOptions = RouteOptions(
             geometry = route.geometry,
-            progress = Distance.meters(1000.0),
+            progress = Distance.meters(100.0),
             departureMarkerVisible = true,
             destinationMarkerVisible = true
         )
         tomtomMap.addRoute(routeOptions)
         tomtomMap.cameraTrackingMode = CameraTrackingMode.FollowRouteDirection
-        tomtomMap.disableLocationMarker()
         routePlanView.visibility = View.INVISIBLE
     }
 

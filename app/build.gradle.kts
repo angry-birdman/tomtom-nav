@@ -56,10 +56,11 @@ dependencies {
     implementation(libs.tt.map.display)
     implementation(libs.tt.provider.android)
     implementation(libs.tt.provider.gms)
-    implementation(libs.tt.provider.proxy)
+    implementation(libs.tt.provider.simulation)
     implementation(libs.tt.search.online)
     implementation(libs.tt.search.ui)
     implementation(libs.tt.route.planner.online)
+
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

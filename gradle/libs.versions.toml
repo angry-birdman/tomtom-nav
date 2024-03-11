@@ -22,7 +22,7 @@ tt-search-online = { module = "com.tomtom.sdk.search:search-online", version.ref
 tt-search-ui = { module = "com.tomtom.sdk.search:ui", version.ref = "tomtomMap" }
 tt-provider-android = { module = "com.tomtom.sdk.location:provider-android", version.ref = "tomtomMap" }
 tt-provider-gms = { module = "com.tomtom.sdk.location:provider-gms", version.ref = "tomtomMap" }
-tt-provider-proxy = { module = "com.tomtom.sdk.location:provider-proxy", version.ref = "tomtomMap" }
+tt-provider-simulation = { module = "com.tomtom.sdk.location:provider-simulation", version.ref = "tomtomMap" }
 tt-map-display = { module = "com.tomtom.sdk.maps:map-display", version.ref = "tomtomMap" }
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
